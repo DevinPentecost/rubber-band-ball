@@ -71,7 +71,6 @@ func _perform_dash():
 func _process(delta):
 	var inputvectors = _interpret_movement_input()
 	
-	print(inputvectors)
 	$MoveTarget.position = inputvectors[0] * 10
 	$LookTarget.position = inputvectors[1] * 10
 
