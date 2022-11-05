@@ -28,6 +28,8 @@ func _on_Ball_body_entered(body:Node2D):
 
 func _handle_Bat_collision(bat):
 	hits += 1
+	print("You hit the ball " + str(hits) + " times!")
+	
 	var direction = linear_velocity.angle()
 	var speed = Vector2.UP * (hits * velocity_per_hit)
 	linear_velocity = speed.rotated(direction)

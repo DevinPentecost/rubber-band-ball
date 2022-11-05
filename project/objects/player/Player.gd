@@ -63,7 +63,7 @@ func _interpret_controller_input():
 func _process(delta):
 	var inputvectors = _interpret_controller_input()
 	
-	print(inputvectors)
+	#print(inputvectors)
 	$MoveTarget.position = inputvectors[0] * 10
 	$LookTarget.position = inputvectors[1] * 10
 

@@ -11,6 +11,7 @@ radius = 1.33
 [node name="Player" type="RigidBody2D"]
 collision_layer = 0
 collision_mask = 9
+mode = 3
 gravity_scale = 0.0
 script = ExtResource( 1 )
 
@@ -33,6 +34,7 @@ modulate = Color( 0, 0, 0, 1 )
 position = Vector2( 5.826, 1.181 )
 collision_layer = 256
 collision_mask = 8
+mode = 3
 gravity_scale = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bat" groups=["bat"]]
