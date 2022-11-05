@@ -1,25 +1,38 @@
 extends RigidBody2D
 class_name Ball
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-var velocity_score: int setget , _get_velocity_score
-var _velocity_score: int
-
 var hits = 0
 var velocity_per_hit = 75
 
-func _get_velocity_score():
-	return _velocity_score
+var nearby_bodies: Array = []
+export(float, 0.5) var slowdown_time_scale_min = 0.5
+export(float, 0.5) var slowdown_time_scale_max = 0.05
+export(int) var slowdown_time_scale_max_hits = 25
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func adjust_timescale(delta):
+	
+	# Should we slow down?
+	var should_slow_down = false
+	if $SlowdownTimer.time_left > 0:
+		if nearby_bodies.size() > 0:
+			# We should be slowing down
+			should_slow_down = true
+	
+	# What should our target be
+	var target_timescale = 1
+	if should_slow_down:
+		target_timescale = lerp(slowdown_time_scale_min, slowdown_time_scale_max, hits / slowdown_time_scale_max_hits)
+	
+	# Adjust timescale
+	Engine.time_scale = lerp(Engine.time_scale, target_timescale, 15.0 * delta)
 
 func _physics_process(delta):
-	_velocity_score = int(linear_velocity.length())
+	
+	# Make sure the speed of the ball is maintained
+	linear_velocity = linear_velocity.normalized() * (hits * velocity_per_hit)
+	
+	# If there are nearby bodies, we want to slow down
+	adjust_timescale(delta)
 
 func _on_Ball_body_entered(body:Node2D):
 	
@@ -29,7 +42,20 @@ func _on_Ball_body_entered(body:Node2D):
 func _handle_Bat_collision(bat):
 	hits += 1
 	print("You hit the ball " + str(hits) + " times!")
+
+
+func _on_Nearby_body_entered(body):
 	
-	var direction = linear_velocity.angle()
-	var speed = Vector2.UP * (hits * velocity_per_hit)
-	linear_velocity = speed.rotated(direction)
+	# If something is nearby we slow down
+	if !body.is_in_group("ball"):
+		nearby_bodies.append(body)
+		
+		# New body has entered, restart the timer
+		$SlowdownTimer.start()
+
+
+func _on_Nearby_body_exited(body):
+	
+	# Return to full speed if there is nothing nearby
+	if nearby_bodies.has(body):
+		nearby_bodies.erase(body)
