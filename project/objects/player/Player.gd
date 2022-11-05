@@ -1,14 +1,15 @@
-extends Node2D
+extends KinematicBody2D
 
 export(float) var moveSpeed = 1
 export(bool) var isMouseAndKeyboard = false
+export(float) var speed = 10
  
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
-func _interpret_controller_input():
+func _interpret_movement_input():
 	if isMouseAndKeyboard:
 		raise()
 	else:
@@ -59,13 +60,33 @@ func _interpret_controller_input():
 	
 		return [Vector2(move_leftright, move_updown).normalized(), Vector2(look_leftright, look_updown).normalized()]
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+var _canSwing = true
+var _canDash = true
+
+func _perform_swing():
+	pass
+func _perform_dash():
+	pass
+
 func _process(delta):
-	var inputvectors = _interpret_controller_input()
+	var inputvectors = _interpret_movement_input()
 	
 	#print(inputvectors)
 	$MoveTarget.position = inputvectors[0] * 10
 	$LookTarget.position = inputvectors[1] * 10
+
+	move_and_slide($MoveTarget.position * speed)
+	$Bat.look_at($LookTarget.global_position)
+	
+	if Input.is_action_just_pressed("swing"):
+		_perform_swing()
+		$Bat/CollisionShape2D.disabled = !$Bat/CollisionShape2D.disabled
+		if $Bat/CollisionShape2D.disabled:
+			$Bat/CollisionShape2D/Sprite.modulate = Color.black
+		else:
+			$Bat/CollisionShape2D/Sprite.modulate = Color.white
+	if Input.is_action_just_pressed("dash"):
+		_perform_dash()
 
 
 func _on_Bat_body_entered(body):

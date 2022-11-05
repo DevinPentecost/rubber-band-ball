@@ -1,14 +1,15 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://objects/player/Player.gd" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://objects/player/bat_metal.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=3]
 radius = 1.33
 
 [sub_resource type="CircleShape2D" id=2]
 
-[node name="Player" type="RigidBody2D"]
+[node name="Player" type="KinematicBody2D"]
 collision_layer = 0
 collision_mask = 9
 mode = 3
@@ -30,16 +31,20 @@ scale = Vector2( 0.05, 0.05 )
 texture = ExtResource( 2 )
 
 [node name="Bat" type="RigidBody2D" parent="." groups=["bat"]]
-modulate = Color( 0, 0, 0, 1 )
-position = Vector2( 5.826, 1.181 )
 collision_layer = 256
 collision_mask = 8
 mode = 3
 gravity_scale = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bat" groups=["bat"]]
-position = Vector2( -2.826, -16.181 )
+position = Vector2( 5, 20 )
+rotation = 2.94786
 shape = SubResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Bat/CollisionShape2D"]
+rotation = -1.5708
+scale = Vector2( 1, 0.66 )
+texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
