@@ -37,7 +37,7 @@ shape = SubResource( 2 )
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 327, 260 )
 
-[node name="Bat" parent="Player" index="2"]
+[node name="Bat" parent="Player" index="4"]
 position = Vector2( -92, -66 )
 contacts_reported = 4
 contact_monitor = true
