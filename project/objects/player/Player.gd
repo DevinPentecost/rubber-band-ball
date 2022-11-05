@@ -3,11 +3,13 @@ extends KinematicBody2D
 export(float) var moveSpeed = 1
 export(bool) var isMouseAndKeyboard = false
 export(float) var speed = 10
+export(float) var swingSpeedRad = 30
  
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	#$BatPivot/Bat/Sprite.modulate = Color.black
+	pass
 
 func _interpret_movement_input():
 	if isMouseAndKeyboard:
@@ -64,9 +66,22 @@ var _canSwing = true
 var _canDash = true
 
 func _perform_swing():
-	pass
+	if _canSwing == false:
+		return
+	_canSwing = false
+	_canDash = false
+	
+	# Add the bat to 9
+	var duration = 0.15
+	$SwingCooldown.start(duration)
+	$SwingTween.interpolate_property($StaticBody2D, "rotation_degrees", $StaticBody2D.rotation_degrees, $StaticBody2D.rotation_degrees-180, duration, Tween.TRANS_LINEAR)
+	$SwingTween.start()
+	
 func _perform_dash():
-	pass
+	if _canDash == false:
+		return
+	_canSwing = false
+	_canDash = false
 
 func _process(delta):
 	var inputvectors = _interpret_movement_input()
@@ -75,20 +90,40 @@ func _process(delta):
 	$LookTarget.position = inputvectors[1] * 10
 
 	move_and_slide($MoveTarget.position * speed)
-	$Bat.look_at($LookTarget.global_position)
+	
+	if _canSwing == true:
+		$StaticBody2D.look_at($LookTarget.global_position)
+		$CharacterSprite.look_at($LookTarget.global_position)
 	
 	if Input.is_action_just_pressed("swing"):
 		_perform_swing()
-		$Bat/CollisionShape2D.disabled = !$Bat/CollisionShape2D.disabled
-		if $Bat/CollisionShape2D.disabled:
-			$Bat/CollisionShape2D/Sprite.modulate = Color.black
-		else:
-			$Bat/CollisionShape2D/Sprite.modulate = Color.white
+			
 	if Input.is_action_just_pressed("dash"):
 		_perform_dash()
+	
+	if _canSwing == false:
+		#$StaticBody2D.rotate(swingSpeedRad * delta * -1)
+		pass
 
 
 func _on_Bat_body_entered(body):
 	if body.is_in_group("ball"):
 		# We hit the ball, stop collision
-		$Bat/CollisionShape2D.disabled = true
+		# Remove the bat from 9
+		#$BatPivot/Bat.layers = $BatPivot/Bat.layers & 0xEF
+		pass
+
+
+func _on_DashCooldown_timeout():
+	_canSwing = true
+	_canDash = true
+
+
+func _on_SwingCooldown_timeout():
+	_canSwing = true
+	_canDash = true
+	# Remove the bat from 9
+	#$BatPivot/Bat.layers = $Bat.layers & 0xEF
+	#$BatPivot/Bat/Sprite.modulate = Color.black
+	#$BatPivot.rotation = 0
+	pass
