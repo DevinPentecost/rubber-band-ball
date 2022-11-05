@@ -1,6 +1,5 @@
 extends KinematicBody2D
 
-export(float) var moveSpeed = 1
 export(bool) var isMouseAndKeyboard = false
 export(float) var speed = 10
 export(float) var swingSpeedRad = 30
@@ -8,7 +7,6 @@ export(float) var swingSpeedRad = 30
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#$BatPivot/Bat/Sprite.modulate = Color.black
 	pass
 
 func _interpret_movement_input():
@@ -72,10 +70,12 @@ func _perform_swing():
 	_canDash = false
 	
 	# Add the bat to 9
+	$Bat.collision_layer = $Bat.collision_layer | 0b000100000000
 	var duration = 0.15
 	$SwingCooldown.start(duration)
-	$SwingTween.interpolate_property($StaticBody2D, "rotation_degrees", $StaticBody2D.rotation_degrees, $StaticBody2D.rotation_degrees-180, duration, Tween.TRANS_LINEAR)
+	$SwingTween.interpolate_property($Bat, "rotation_degrees", $Bat.rotation_degrees, $Bat.rotation_degrees-180, duration, Tween.TRANS_LINEAR)
 	$SwingTween.start()
+	
 	
 func _perform_dash():
 	if _canDash == false:
@@ -87,12 +87,14 @@ func _process(delta):
 	var inputvectors = _interpret_movement_input()
 	
 	$MoveTarget.position = inputvectors[0] * 10
-	$LookTarget.position = inputvectors[1] * 10
+	
+	if inputvectors[1] != Vector2(0,0):
+		$LookTarget.position = inputvectors[1] * 10
 
 	move_and_slide($MoveTarget.position * speed)
 	
 	if _canSwing == true:
-		$StaticBody2D.look_at($LookTarget.global_position)
+		$Bat.look_at($LookTarget.global_position)
 		$CharacterSprite.look_at($LookTarget.global_position)
 	
 	if Input.is_action_just_pressed("swing"):
@@ -100,17 +102,13 @@ func _process(delta):
 			
 	if Input.is_action_just_pressed("dash"):
 		_perform_dash()
-	
-	if _canSwing == false:
-		#$StaticBody2D.rotate(swingSpeedRad * delta * -1)
-		pass
 
 
 func _on_Bat_body_entered(body):
 	if body.is_in_group("ball"):
 		# We hit the ball, stop collision
 		# Remove the bat from 9
-		#$BatPivot/Bat.layers = $BatPivot/Bat.layers & 0xEF
+		$Bat.collision_layer = $Bat.collision_layer & 0b111011111111
 		pass
 
 
@@ -123,6 +121,7 @@ func _on_SwingCooldown_timeout():
 	_canSwing = true
 	_canDash = true
 	# Remove the bat from 9
+	$Bat.collision_layer = $Bat.collision_layer & 0b111011111111
 	#$BatPivot/Bat.layers = $Bat.layers & 0xEF
 	#$BatPivot/Bat/Sprite.modulate = Color.black
 	#$BatPivot.rotation = 0
