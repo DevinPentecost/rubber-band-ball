@@ -4,6 +4,8 @@ export(float) var moveSpeed = 1
 export(bool) var isMouseAndKeyboard = false
 export(float) var speed = 10
 export(float) var swingSpeedRad = 30
+
+var lives: int = 3
  
 
 # Called when the node enters the scene tree for the first time.
@@ -128,3 +130,15 @@ func _on_SwingCooldown_timeout():
 	#$BatPivot/Bat/Sprite.modulate = Color.black
 	#$BatPivot.rotation = 0
 	pass
+
+func take_damage():
+	if self.invincible():
+		print("You were invincible when you got hit")
+		return
+	
+	print("You got hit by the ball")
+	lives -= 1
+	$InvulnTimer.start()
+
+func invincible():
+	return $InvulnTimer.time_left > 0

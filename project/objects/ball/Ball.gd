@@ -38,6 +38,10 @@ func _on_Ball_body_entered(body:Node2D):
 	
 	if body.is_in_group("bat"):
 		_handle_Bat_collision(body)
+		
+	if body.is_in_group("player"):
+		#Player takes damage
+		body.take_damage()
 
 func _handle_Bat_collision(bat):
 	hits += 1

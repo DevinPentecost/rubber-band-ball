@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=5 format=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Label
@@ -14,6 +14,41 @@ func _physics_process(delta):
 	text = \"Score: \" + ball.hits as String
 "
 
+[sub_resource type="GDScript" id=2]
+script/source = "extends Label
+
+onready var player = get_tree().get_nodes_in_group(\"player\")[0]
+
+func _process(delta):
+	text = \"Lives: \" + str(player.lives)
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends CheckButton
+
+onready var player = get_tree().get_nodes_in_group(\"player\")[0]
+
+
+func _on_CheckButton_toggled(button_pressed):
+	player.isMouseAndKeyboard = !button_pressed
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends ColorRect
+
+onready var player = get_tree().get_nodes_in_group(\"player\")[0]
+onready var ball = get_tree().get_nodes_in_group(\"ball\")[0]
+
+func show():
+	$Tween.interpolate_property(self, \"modulate\", self.modulate, Color.white, 1, Tween.TRANS_EXPO, Tween.EASE_OUT)
+
+func _process(delta):
+	if player.lives <= 0:
+		show()
+		$Label.text = \"Final Score: \" + str(ball.hits)
+		set_process(false)
+"
+
 [node name="GUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,8 +56,59 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Score" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Score" type="Label" parent="VBoxContainer"]
+margin_right = 141.0
 margin_bottom = 14.0
 text = "Score: 1234"
 script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Lives" type="Label" parent="VBoxContainer"]
+margin_top = 18.0
+margin_right = 141.0
+margin_bottom = 32.0
+text = "Score: 1234"
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer"]
+margin_top = 36.0
+margin_right = 141.0
+margin_bottom = 76.0
+pressed = true
+text = "Gamepad"
+script = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameOver" type="ColorRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 40.0
+margin_bottom = 40.0
+color = Color( 0, 0, 0, 1 )
+script = SubResource( 3 )
+
+[node name="Label" type="Label" parent="GameOver"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -7.0
+margin_bottom = 7.0
+text = "Game Over!
+Final Score: 1234"
+align = 1
+
+[node name="Tween" type="Tween" parent="GameOver"]
+
+[connection signal="toggled" from="VBoxContainer/CheckButton" to="VBoxContainer/CheckButton" method="_on_CheckButton_toggled"]

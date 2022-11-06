@@ -10,7 +10,7 @@
 
 [sub_resource type="CapsuleShape2D" id=4]
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=["player"]]
 collision_layer = 0
 collision_mask = 9
 script = ExtResource( 1 )
@@ -69,6 +69,9 @@ one_shot = true
 one_shot = true
 
 [node name="SwingTween" type="Tween" parent="."]
+
+[node name="InvulnTimer" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="timeout" from="SwingCooldown" to="." method="_on_SwingCooldown_timeout"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_DashCooldown_timeout"]
