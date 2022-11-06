@@ -19,8 +19,24 @@ script/source = "extends Label
 
 onready var player = get_tree().get_nodes_in_group(\"player\")[0]
 
+var strike_1 = preload(\"res://objects/arena/strike_1.wav\")
+var strike_2 = preload(\"res://objects/arena/strike_2.wav\")
+var strike_3 = preload(\"res://objects/arena/strike_3.wav\")
+onready var previous = player.lives
+
 func _process(delta):
 	text = \"Lives: \" + str(player.lives)
+	
+	if previous != player.lives:
+		var stream = {
+			2: strike_1,
+			1: strike_2,
+			0: strike_3
+		}[player.lives]
+		$Strike.stream = stream
+		$Strike.play()
+	
+	previous = player.lives
 "
 
 [sub_resource type="GDScript" id=4]
@@ -44,7 +60,7 @@ var over = false
 func show():
 	
 	over = true
-	$Label.text = \"Final Score: \" + str(ball.hits)
+	$Label.text = \"You're Out!\\nPress R to restart\\nFinal Score: \" + str(ball.hits)
 	$Tween.interpolate_property(self, \"modulate\", self.modulate, Color.white, 1, Tween.TRANS_EXPO, Tween.EASE_OUT)
 	$Tween.start()
 
@@ -83,6 +99,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Strike" type="AudioStreamPlayer" parent="VBoxContainer/Lives"]
+
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer"]
 margin_top = 36.0
 margin_right = 141.0
@@ -110,6 +128,9 @@ margin_bottom = 7.0
 text = "Game Over!
 Final Score: 1234"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Tween" type="Tween" parent="GameOver"]
 

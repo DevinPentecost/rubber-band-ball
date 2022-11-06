@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://objects/player/Player.gd" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
@@ -6,14 +6,29 @@
 [ext_resource path="res://objects/player/characterRed (4).png" type="Texture" id=4]
 [ext_resource path="res://objects/player/characterRed (12).png" type="Texture" id=5]
 [ext_resource path="res://objects/player/bat_metal_2.png" type="Texture" id=6]
+[ext_resource path="res://objects/player/smoke_06.png" type="Texture" id=7]
 
 [sub_resource type="CircleShape2D" id=2]
 
-[node name="Player" type="KinematicBody2D" groups=["player"]]
+[node name="Player" type="KinematicBody2D" groups=["player", "slowmo"]]
 collision_layer = 0
 collision_mask = 9
 script = ExtResource( 1 )
 isMouseAndKeyboard = true
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 20
+lifetime = 0.5
+local_coords = false
+texture = ExtResource( 7 )
+spread = 114.36
+gravity = Vector2( 0, 0 )
+angular_velocity = 3.0
+angular_velocity_random = 0.33
+angle = 92.5
+angle_random = 1.0
+scale_amount = 0.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )

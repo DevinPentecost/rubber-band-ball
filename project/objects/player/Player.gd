@@ -116,7 +116,7 @@ func _perform_dash():
 	var duration = 0.20
 	$DashCooldown.start(duration * 3)
 	$DashActive.start(duration)
-	
+	$CPUParticles2D.emitting = true
 
 func _process(delta):
 	var inputvectors = _interpret_movement_input()
@@ -139,6 +139,9 @@ func _process(delta):
 			
 	if Input.is_action_just_pressed("dash"):
 		_perform_dash()
+		
+	if Input.is_action_just_pressed("restart"):
+		get_tree().reload_current_scene()
 
 
 func _on_Bat_body_entered(body):
@@ -183,3 +186,4 @@ func _on_BatActive_timeout():
 
 func _on_DashActive_timeout():
 	_dashing = false
+	$CPUParticles2D.emitting = false
