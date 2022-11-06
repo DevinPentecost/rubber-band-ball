@@ -3,6 +3,7 @@ class_name Ball
 
 var hits = 0
 var velocity_per_hit = 75
+export(float) var min_speed = 300
 
 var nearby_bodies: Array = []
 export(float, 0.5) var slowdown_time_scale_min = 0.5
@@ -29,7 +30,10 @@ func adjust_timescale(delta):
 func _physics_process(delta):
 	
 	# Make sure the speed of the ball is maintained
-	linear_velocity = linear_velocity.normalized() * (hits * velocity_per_hit)
+	if hits == 0:
+		linear_velocity = Vector2.ZERO
+	else:
+		linear_velocity = linear_velocity.normalized() * ((hits * velocity_per_hit) + min_speed)
 	
 	# If there are nearby bodies, we want to slow down
 	adjust_timescale(delta)
@@ -46,6 +50,8 @@ func _on_Ball_body_entered(body:Node2D):
 func _handle_Bat_collision(bat):
 	hits += 1
 	print("You hit the ball " + str(hits) + " times!")
+	var position_difference = global_position - bat.global_position
+	linear_velocity = position_difference.normalized()
 
 
 func _on_Nearby_body_entered(body):
