@@ -1,13 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://objects/ball/Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/gui/gui.tscn" type="PackedScene" id=2]
+[ext_resource path="res://objects/player/Player.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 10, 300 )
+extents = Vector2( 50, 250 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 300, 10 )
+extents = Vector2( 512, 50 )
 
 [sub_resource type="PhysicsMaterial" id=3]
 friction = 0.0
@@ -16,29 +17,33 @@ bounce = 1.0
 [node name="Arena" type="Node2D"]
 
 [node name="OuterWalls" type="StaticBody2D" parent="."]
-position = Vector2( 17, 319 )
 
 [node name="Left" type="CollisionShape2D" parent="OuterWalls"]
+position = Vector2( 50, 300 )
 shape = SubResource( 1 )
 
 [node name="Right" type="CollisionShape2D" parent="OuterWalls"]
-position = Vector2( 600, 0 )
+position = Vector2( 974, 300 )
 shape = SubResource( 1 )
 
 [node name="Top" type="CollisionShape2D" parent="OuterWalls"]
-position = Vector2( 300, -300 )
+position = Vector2( 512, 0 )
 shape = SubResource( 2 )
 
 [node name="Bottom" type="CollisionShape2D" parent="OuterWalls"]
-position = Vector2( 300, 300 )
+position = Vector2( 512, 600 )
 shape = SubResource( 2 )
 
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 327, 260 )
+scale = Vector2( 1.5, 1.5 )
+speed = 50.0
+
 [node name="Ball" parent="." instance=ExtResource( 1 )]
-position = Vector2( 191, 134 )
+position = Vector2( 217, 146 )
 physics_material_override = SubResource( 3 )
-gravity_scale = 0.0
-continuous_cd = 1
-can_sleep = false
 linear_velocity = Vector2( 100, 100 )
 
 [node name="GUI" parent="." instance=ExtResource( 2 )]
+
+[editable path="Player"]

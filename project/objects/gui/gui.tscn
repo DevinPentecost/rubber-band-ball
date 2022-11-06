@@ -11,15 +11,12 @@ func _ready():
 
 
 func _physics_process(delta):
-	text = \"Score: \" + ball.velocity_score as String
+	text = \"Score: \" + ball.hits as String
 "
 
 [node name="GUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Score" type="Label" parent="."]
 margin_right = 40.0
