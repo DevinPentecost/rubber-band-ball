@@ -5,39 +5,50 @@
 [ext_resource path="res://objects/player/bat_metal.png" type="Texture" id=3]
 [ext_resource path="res://objects/player/characterRed (4).png" type="Texture" id=4]
 [ext_resource path="res://objects/player/characterRed (12).png" type="Texture" id=5]
+[ext_resource path="res://objects/player/bat_metal_2.png" type="Texture" id=6]
 
 [sub_resource type="CircleShape2D" id=2]
-
-[sub_resource type="CapsuleShape2D" id=4]
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 0
 collision_mask = 9
 script = ExtResource( 1 )
+isMouseAndKeyboard = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["bat"]]
-collision_layer = 256
+[node name="Bat" type="Area2D" parent="." groups=["bat"]]
+collision_layer = 0
 collision_mask = 8
+monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2( 7.11779, 32.7381 )
-rotation = 2.96706
-scale = Vector2( 0.33, 0.8 )
-shape = SubResource( 4 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Bat"]
+position = Vector2( 5, 7 )
+polygon = PoolVector2Array( 3, 25, 11, 25, 19, 20, 27, 13, 35, 4, 35, -17, 27, -26, 19, -35, 11, -39, 3, -39 )
 
-[node name="Sprite2" type="Sprite" parent="StaticBody2D"]
-position = Vector2( 4, 17 )
-rotation = 1.39626
+[node name="InactiveBat" type="Sprite" parent="Bat"]
+position = Vector2( 4, 21 )
+rotation = 1.60187
+scale = Vector2( 0.441166, 0.667093 )
+texture = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Bat/InactiveBat"]
+position = Vector2( -11.8048, 1.03816 )
+rotation = -0.13663
+scale = Vector2( 0.980575, 0.782309 )
 texture = ExtResource( 5 )
 
-[node name="Sprite" type="Sprite" parent="StaticBody2D"]
-position = Vector2( 7.11779, 32.7381 )
-rotation = 1.39626
-scale = Vector2( 1, 0.66 )
-texture = ExtResource( 3 )
+[node name="Sprite" type="Sprite" parent="Bat"]
+visible = false
+position = Vector2( 20.5, 7.25 )
+scale = Vector2( 0.84375, 0.621094 )
+texture = ExtResource( 6 )
+
+[node name="Sprite" type="Sprite" parent="Bat/Sprite"]
+position = Vector2( -18.3704, -39.044 )
+rotation = -0.817058
+texture = ExtResource( 5 )
 
 [node name="MoveTarget" type="Node2D" parent="."]
 
@@ -53,22 +64,26 @@ modulate = Color( 1, 0, 0, 1 )
 scale = Vector2( 0.05, 0.05 )
 texture = ExtResource( 2 )
 
-[node name="Bat" type="RigidBody2D" parent="." groups=["bat"]]
-collision_layer = 256
-collision_mask = 8
-mode = 3
-gravity_scale = 0.0
-
 [node name="CharacterSprite" type="Sprite" parent="."]
 texture = ExtResource( 4 )
 
 [node name="SwingCooldown" type="Timer" parent="."]
 one_shot = true
 
+[node name="BatActive" type="Timer" parent="."]
+one_shot = true
+
 [node name="DashCooldown" type="Timer" parent="."]
 one_shot = true
 
-[node name="SwingTween" type="Tween" parent="."]
+[node name="DashActive" type="Timer" parent="."]
+one_shot = true
 
+[node name="SwingTween" type="Tween" parent="."]
+playback_process_mode = 0
+
+[connection signal="body_entered" from="Bat" to="." method="_on_Bat_body_entered"]
 [connection signal="timeout" from="SwingCooldown" to="." method="_on_SwingCooldown_timeout"]
+[connection signal="timeout" from="BatActive" to="." method="_on_BatActive_timeout"]
 [connection signal="timeout" from="DashCooldown" to="." method="_on_DashCooldown_timeout"]
+[connection signal="timeout" from="DashActive" to="." method="_on_DashActive_timeout"]
