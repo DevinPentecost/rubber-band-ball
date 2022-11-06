@@ -1,5 +1,25 @@
 [gd_scene load_steps=5 format=2]
 
+[sub_resource type="GDScript" id=3]
+script/source = "extends ColorRect
+
+onready var player = get_tree().get_nodes_in_group(\"player\")[0]
+onready var ball = get_tree().get_nodes_in_group(\"ball\")[0]
+
+var over = false
+
+func show():
+	
+	over = true
+	$Label.text = \"You're Out!\\nPress R to restart\\nFinal Score: \" + str(ball.hits)
+	$Tween.interpolate_property(self, \"modulate\", self.modulate, Color.white, 1, Tween.TRANS_EXPO, Tween.EASE_OUT)
+	$Tween.start()
+
+func _process(delta):
+	if player.lives <= 0 and !over:
+		show()
+"
+
 [sub_resource type="GDScript" id=1]
 script/source = "extends Label
 
@@ -49,32 +69,31 @@ func _on_CheckButton_toggled(button_pressed):
 	player.isMouseAndKeyboard = !button_pressed
 "
 
-[sub_resource type="GDScript" id=3]
-script/source = "extends ColorRect
-
-onready var player = get_tree().get_nodes_in_group(\"player\")[0]
-onready var ball = get_tree().get_nodes_in_group(\"ball\")[0]
-
-var over = false
-
-func show():
-	
-	over = true
-	$Label.text = \"You're Out!\\nPress R to restart\\nFinal Score: \" + str(ball.hits)
-	$Tween.interpolate_property(self, \"modulate\", self.modulate, Color.white, 1, Tween.TRANS_EXPO, Tween.EASE_OUT)
-	$Tween.start()
-
-func _process(delta):
-	if player.lives <= 0 and !over:
-		show()
-"
-
 [node name="GUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="GameOver" type="ColorRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+script = SubResource( 3 )
+
+[node name="Label" type="Label" parent="GameOver"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -7.0
+margin_bottom = 7.0
+text = "Game Over!
+Final Score: 1234"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Tween" type="Tween" parent="GameOver"]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 40.0
@@ -111,27 +130,5 @@ script = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="GameOver" type="ColorRect" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
-script = SubResource( 3 )
-
-[node name="Label" type="Label" parent="GameOver"]
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_top = -7.0
-margin_bottom = 7.0
-text = "Game Over!
-Final Score: 1234"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Tween" type="Tween" parent="GameOver"]
 
 [connection signal="toggled" from="VBoxContainer/CheckButton" to="VBoxContainer/CheckButton" method="_on_CheckButton_toggled"]

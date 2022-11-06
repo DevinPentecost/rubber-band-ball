@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Saxy_French_1.wav-19dbfc3df4feeb76b04c0a09c8afae54.sample"
+path="res://.import/speedmo.wav-77ba2b3734afc145245930f1a80b631c.sample"
 
 [deps]
 
-source_file="res://objects/arena/Saxy_French_1.wav"
-dest_files=[ "res://.import/Saxy_French_1.wav-19dbfc3df4feeb76b04c0a09c8afae54.sample" ]
+source_file="res://audio/speedmo.wav"
+dest_files=[ "res://.import/speedmo.wav-77ba2b3734afc145245930f1a80b631c.sample" ]
 
 [params]
 

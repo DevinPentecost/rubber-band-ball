@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Saxy_French_1.wav-19dbfc3df4feeb76b04c0a09c8afae54.sample"
+path="res://.import/slomo.wav-bb2e28837731bc5612016964afc293b3.sample"
 
 [deps]
 
-source_file="res://objects/arena/Saxy_French_1.wav"
-dest_files=[ "res://.import/Saxy_French_1.wav-19dbfc3df4feeb76b04c0a09c8afae54.sample" ]
+source_file="res://audio/slomo.wav"
+dest_files=[ "res://.import/slomo.wav-bb2e28837731bc5612016964afc293b3.sample" ]
 
 [params]
 

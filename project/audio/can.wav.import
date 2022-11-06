@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Saxy_French_1.wav-19dbfc3df4feeb76b04c0a09c8afae54.sample"
+path="res://.import/can.wav-856b2ecf2854dfb61fd7016817e04b67.sample"
 
 [deps]
 
-source_file="res://objects/arena/Saxy_French_1.wav"
-dest_files=[ "res://.import/Saxy_French_1.wav-19dbfc3df4feeb76b04c0a09c8afae54.sample" ]
+source_file="res://audio/can.wav"
+dest_files=[ "res://.import/can.wav-856b2ecf2854dfb61fd7016817e04b67.sample" ]
 
 [params]
 
